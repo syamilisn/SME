@@ -259,7 +259,7 @@ static int oled_probe(struct i2c_client * client,const struct i2c_device_id * id
     ssd1306_set_cursor(0,0); 
     
     //Write String to OLED
-    ssd1306_string_display("Welcome\nTo\nSasken\n\n");
+    ssd1306_string_display("WELCOME\nTO\nSYAMDETECT\n\n");
     
     return 0;
 }
@@ -272,7 +272,7 @@ static void oled_remove(struct i2c_client * client) {
     //Set cursor
     //ssd1306_set_cursor(2,0);  
     //Write String to OLED
-    ssd1306_string_display("ThanK YoU!!!");
+    ssd1306_string_display("THANK YOU!!!");
 
     //Set cursor
     ssd1306_set_cursor(0, 0);
@@ -316,7 +316,7 @@ static struct i2c_board_info oled_i2c_board_info = {
 
 
 unsigned long old_jiffie = 0;
-static irqreturn_t ir_sensor_irq_handler(int irq, void * dev_id) {
+static irqreturn_t ldr_sensor_irq_handler(int irq, void * dev_id) {
 
      unsigned long diff = jiffies - old_jiffie;
      if (diff < 500) {
@@ -331,12 +331,12 @@ static irqreturn_t ir_sensor_irq_handler(int irq, void * dev_id) {
     if(curr_value1==1)
     {
         count=0;
-        pr_info("It's dark\n");
+        pr_info("No light detected...!\n"); //For Darkness
     }
     else
     {
         count=1;
-        pr_info("It's Not dark\n");
+        pr_info("Intruder detected...!\n"); //For Intruder in Darkness (not dark)
     }
 
 
@@ -344,9 +344,11 @@ static irqreturn_t ir_sensor_irq_handler(int irq, void * dev_id) {
 
     return IRQ_WAKE_THREAD;
 }
-static int brightness = 5;
+static int brightness = 5;      // Global variable for changing contract settings
 static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {
-
+    /*
+        Function that handles the thread created by IRQ
+    */
     ssd1306_init();
 
     //Set cursor
@@ -358,13 +360,13 @@ static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {
       //Write String to OLED
       
       {
-        ssd1306_string_display("Howdy !!! It's Day outside \n");
-	brightness = 3;
+        ssd1306_string_display("Intruder detected.\n");    //Day outside/ Intruder present
+        brightness = 3;     //Set low brightness when intruder is detected
       }
       else
       {
-        ssd1306_string_display("Hola !!! Its Dark \n");
-	brightness = 149;
+        ssd1306_string_display("No light detected.\n");     //Its dark/ Empty room
+	    brightness = 149;   //Set high brightness when no light is detected
       }
     
     return IRQ_HANDLED;
@@ -386,10 +388,10 @@ static int __init etx_driver_init(void) {
         i2c_put_adapter(ldr_i2c_adapter);
     }
 
-    // Request GPIO pin for IR sensor
-    ret = gpio_request(SENSOR1_PIN, "ir_sensor1");
+    // Request GPIO pin for LDR sensor
+    ret = gpio_request(SENSOR1_PIN, "ldr_sensor");
     if (ret < 0) {
-        printk(KERN_ERR "Failed to request GPIO %d for IR sensor\n", SENSOR1_PIN);
+        printk(KERN_ERR "Failed to request GPIO %d for LDR sensor\n", SENSOR1_PIN);
         return ret;
     }
 
@@ -397,13 +399,13 @@ static int __init etx_driver_init(void) {
     // Set GPIO pin as input
     ret = gpio_direction_input(SENSOR1_PIN);
     if (ret < 0) {
-        printk(KERN_ERR "Failed to set GPIO %d as input for IR sensor\n", SENSOR1_PIN);
+        printk(KERN_ERR "Failed to set GPIO %d as input for LDR sensor\n", SENSOR1_PIN);
         gpio_free(SENSOR1_PIN);
         return ret;
     }
-    ret = request_threaded_irq(gpio_to_irq(SENSOR1_PIN), ir_sensor_irq_handler, interrupt_thread_fn, IRQF_TRIGGER_RISING, "ir_sensor1", NULL);
+    ret = request_threaded_irq(gpio_to_irq(SENSOR1_PIN), ldr_sensor_irq_handler, interrupt_thread_fn, IRQF_TRIGGER_RISING, "ldr_sensor", NULL);
     if (ret < 0) {
-        printk(KERN_ERR "Failed to request interrupt for IR sensor\n");
+        printk(KERN_ERR "Failed to request interrupt for LDR sensor\n");
         gpio_free(SENSOR1_PIN);
         return ret;
     }
@@ -427,7 +429,7 @@ static void __exit etx_driver_exit(void) {
    
     del_timer_sync( & my_timer);
 
-    printk(KERN_INFO "IR sensor driver exited\n");
+    printk(KERN_INFO "LDR sensor driver exited\n");
 }
 module_init(etx_driver_init);
 module_exit(etx_driver_exit);
