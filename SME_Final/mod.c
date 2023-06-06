@@ -20,7 +20,7 @@
  */
 
 static struct i2c_adapter * ldr_i2c_adapter = NULL; // I2C Adapter Structure
-static struct i2c_client * ldr_i2c_client_oled = NULL; // I2C Cient Structure (In our case it is OLED)
+static struct i2c_client * ldr_i2c_client_oled = NULL; // I2C Client Structure (In our case it is OLED)
 
 static int  count = 0,curr_value1=0;
 
@@ -284,26 +284,26 @@ static void oled_remove(struct i2c_client * client) {
     pr_info("OLED Removed!!!\n");
 }
 
-static const struct i2c_device_id etx_oled_id[] = {
+static const struct i2c_device_id ldr_oled_id[] = {
     {
         SLAVE_DEVICE_NAME,
         0
     },
     {}
 };
-MODULE_DEVICE_TABLE(i2c, etx_oled_id);
+MODULE_DEVICE_TABLE(i2c, ldr_oled_id);
 
 /*
  ** I2C driver Structure that has to be added to linux
  */
-static struct i2c_driver etx_oled_driver = {
+static struct i2c_driver ldr_oled_driver = {
     .driver = {
         .name = SLAVE_DEVICE_NAME,
         .owner = THIS_MODULE,
     },
     .probe = oled_probe,
     .remove         = oled_remove,
-    .id_table = etx_oled_id,
+    .id_table = ldr_oled_id,
 };
 
 /*
@@ -326,7 +326,7 @@ static irqreturn_t ldr_sensor_irq_handler(int irq, void * dev_id) {
     // old_jiffie = jiffies;
 
     // Read the value from the GPIO pin
-    curr_value1 = gpio_get_value(SENSOR1_PIN);
+    curr_value1 = gpio_get_value(SENSOR_PIN);
    pr_info("Data = %d\n",curr_value1); 
     if(curr_value1==1)
     {
@@ -372,7 +372,7 @@ static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {
     return IRQ_HANDLED;
 }
 
-static int __init etx_driver_init(void) {
+static int __init ldr_driver_init(void) {
 
     //ssd1306_write(true, 0x81); // Contrast command
     ldr_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
@@ -381,7 +381,7 @@ static int __init etx_driver_init(void) {
         ldr_i2c_client_oled = i2c_new_client_device(ldr_i2c_adapter, & oled_i2c_board_info);
 
         if (ldr_i2c_client_oled != NULL) {
-            i2c_add_driver( & etx_oled_driver);
+            i2c_add_driver( & ldr_oled_driver);
             ret = 0;
         }
 
@@ -389,24 +389,24 @@ static int __init etx_driver_init(void) {
     }
 
     // Request GPIO pin for LDR sensor
-    ret = gpio_request(SENSOR1_PIN, "ldr_sensor");
+    ret = gpio_request(SENSOR_PIN, "ldr_sensor");
     if (ret < 0) {
-        printk(KERN_ERR "Failed to request GPIO %d for LDR sensor\n", SENSOR1_PIN);
+        printk(KERN_ERR "Failed to request GPIO %d for LDR sensor\n", SENSOR_PIN);
         return ret;
     }
 
     
     // Set GPIO pin as input
-    ret = gpio_direction_input(SENSOR1_PIN);
+    ret = gpio_direction_input(SENSOR_PIN);
     if (ret < 0) {
-        printk(KERN_ERR "Failed to set GPIO %d as input for LDR sensor\n", SENSOR1_PIN);
-        gpio_free(SENSOR1_PIN);
+        printk(KERN_ERR "Failed to set GPIO %d as input for LDR sensor\n", SENSOR_PIN);
+        gpio_free(SENSOR_PIN);
         return ret;
     }
-    ret = request_threaded_irq(gpio_to_irq(SENSOR1_PIN), ldr_sensor_irq_handler, interrupt_thread_fn, IRQF_TRIGGER_RISING, "ldr_sensor", NULL);
+    ret = request_threaded_irq(gpio_to_irq(SENSOR_PIN), ldr_sensor_irq_handler, interrupt_thread_fn, IRQF_TRIGGER_RISING, "ldr_sensor", NULL);
     if (ret < 0) {
         printk(KERN_ERR "Failed to request interrupt for LDR sensor\n");
-        gpio_free(SENSOR1_PIN);
+        gpio_free(SENSOR_PIN);
         return ret;
     }
 
@@ -419,20 +419,20 @@ static int __init etx_driver_init(void) {
 /*
  ** Module Exit function
  */
-static void __exit etx_driver_exit(void) {
+static void __exit ldr_driver_exit(void) {
     i2c_unregister_device(ldr_i2c_client_oled);
-    i2c_del_driver( & etx_oled_driver);
+    i2c_del_driver( & ldr_oled_driver);
     
-    free_irq(gpio_to_irq(SENSOR1_PIN), NULL);
-    gpio_free(SENSOR1_PIN);
+    free_irq(gpio_to_irq(SENSOR_PIN), NULL);
+    gpio_free(SENSOR_PIN);
 
    
     del_timer_sync( & my_timer);
 
     printk(KERN_INFO "LDR sensor driver exited\n");
 }
-module_init(etx_driver_init);
-module_exit(etx_driver_exit);
+module_init(ldr_driver_init);
+module_exit(ldr_driver_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("SYAMDETECT");

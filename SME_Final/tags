@@ -1,0 +1,49 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	//
+Cursor_pos	ssd1306.h	/^static uint8_t Cursor_pos = 0;$/;"	v	typeref:typename:uint8_t
+I2C_BUS_AVAILABLE	ssd1306.h	/^#define I2C_BUS_AVAILABLE /;"	d
+KDIR	Makefile	/^KDIR = \/lib\/modules\/$(shell uname -r)\/build$/;"	m
+SENSOR1_PIN	ssd1306.h	/^#define SENSOR1_PIN /;"	d
+SLAVE_DEVICE_NAME	ssd1306.h	/^#define SLAVE_DEVICE_NAME /;"	d
+SSD1306_DEF_FONT_SIZE	ssd1306.h	/^#define SSD1306_DEF_FONT_SIZE /;"	d
+SSD1306_FontSize	ssd1306.h	/^static uint8_t SSD1306_FontSize  = SSD1306_DEF_FONT_SIZE;$/;"	v	typeref:typename:uint8_t
+SSD1306_H	ssd1306.h	/^#define SSD1306_H$/;"	d
+SSD1306_MAX_LINE	ssd1306.h	/^#define SSD1306_MAX_LINE /;"	d
+SSD1306_MAX_SEG	ssd1306.h	/^#define SSD1306_MAX_SEG /;"	d
+SSD1306_SLAVE_ADDR	ssd1306.h	/^#define SSD1306_SLAVE_ADDR /;"	d
+SSD1306_SetBrightness	mod.c	/^static void SSD1306_SetBrightness(uint8_t brightnessValue)$/;"	f	typeref:typename:void	file:
+SSD1306_font	ssd1306.h	/^static const unsigned char SSD1306_font[][SSD1306_DEF_FONT_SIZE]= $/;"	v	typeref:typename:const unsigned char[][]
+all	Makefile	/^all:$/;"	t
+brightness	mod.c	/^static int brightness = 5;      \/\/ Global variable for changing contract settings$/;"	v	typeref:typename:int	file:
+clean	Makefile	/^clean:$/;"	t
+count	mod.c	/^static int  count = 0,curr_value1=0;$/;"	v	typeref:typename:int	file:
+curr_value1	mod.c	/^static int  count = 0,curr_value1=0;$/;"	v	typeref:typename:int	file:
+i2c_write	mod.c	/^static int i2c_write(unsigned char * buf, unsigned int len) {$/;"	f	typeref:typename:int	file:
+interrupt_thread_fn	mod.c	/^static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {$/;"	f	typeref:typename:irqreturn_t	file:
+ldr_driver_exit	mod.c	/^static void __exit ldr_driver_exit(void) {$/;"	f	typeref:typename:void __exit	file:
+ldr_driver_init	mod.c	/^static int __init ldr_driver_init(void) {$/;"	f	typeref:typename:int __init	file:
+ldr_i2c_adapter	mod.c	/^static struct i2c_adapter * ldr_i2c_adapter = NULL; \/\/ I2C Adapter Structure$/;"	v	typeref:struct:i2c_adapter *	file:
+ldr_i2c_client_oled	mod.c	/^static struct i2c_client * ldr_i2c_client_oled = NULL; \/\/ I2C Client Structure (In our case it/;"	v	typeref:struct:i2c_client *	file:
+ldr_oled_driver	mod.c	/^static struct i2c_driver ldr_oled_driver = {$/;"	v	typeref:struct:i2c_driver	file:
+ldr_oled_id	mod.c	/^static const struct i2c_device_id ldr_oled_id[] = {$/;"	v	typeref:typename:const struct i2c_device_id[]	file:
+ldr_sensor_irq_handler	mod.c	/^static irqreturn_t ldr_sensor_irq_handler(int irq, void * dev_id) {$/;"	f	typeref:typename:irqreturn_t	file:
+line_num	ssd1306.h	/^static uint8_t line_num   = 0;$/;"	v	typeref:typename:uint8_t
+my_timer	mod.c	/^static struct timer_list my_timer;$/;"	v	typeref:struct:timer_list	file:
+old_jiffie	mod.c	/^unsigned long old_jiffie = 0;$/;"	v	typeref:typename:unsigned long
+oled_i2c_board_info	mod.c	/^static struct i2c_board_info oled_i2c_board_info = {$/;"	v	typeref:struct:i2c_board_info	file:
+oled_probe	mod.c	/^static int oled_probe(struct i2c_client * client,const struct i2c_device_id * id) {$/;"	f	typeref:typename:int	file:
+oled_remove	mod.c	/^static void oled_remove(struct i2c_client * client) {$/;"	f	typeref:typename:void	file:
+ret	ssd1306.h	/^int ret;$/;"	v	typeref:typename:int
+ssd1306_fill	mod.c	/^static void ssd1306_fill(unsigned char data) {$/;"	f	typeref:typename:void	file:
+ssd1306_goto_next_line	mod.c	/^static void ssd1306_goto_next_line(void) {$/;"	f	typeref:typename:void	file:
+ssd1306_init	mod.c	/^static int ssd1306_init(void) {$/;"	f	typeref:typename:int	file:
+ssd1306_print_char	mod.c	/^static void ssd1306_print_char(unsigned char c) {$/;"	f	typeref:typename:void	file:
+ssd1306_set_cursor	mod.c	/^static void ssd1306_set_cursor(uint8_t lineNo, uint8_t cursorPos) {$/;"	f	typeref:typename:void	file:
+ssd1306_string_display	mod.c	/^static void ssd1306_string_display(unsigned char * str) {$/;"	f	typeref:typename:void	file:
+ssd1306_write	mod.c	/^static void ssd1306_write(bool is_cmd, unsigned char data) {$/;"	f	typeref:typename:void	file:
+str	ssd1306.h	/^char str[100];$/;"	v	typeref:typename:char[100]

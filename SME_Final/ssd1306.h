@@ -12,7 +12,7 @@
 
 
 #define I2C_BUS_AVAILABLE       (          1 )              // I2C Bus available in our Raspberry Pi
-#define SLAVE_DEVICE_NAME       ( "ETX_OLED" )              // Device and Driver Name
+#define SLAVE_DEVICE_NAME       ( "LDR_OLED" )              // Device and Driver Name
 #define SSD1306_SLAVE_ADDR      (       0x3C )              // SSD1306 OLED Slave Address
 #define SSD1306_MAX_SEG         (        128 )              // Maximum segment
 #define SSD1306_MAX_LINE        (          7 )              // Maximum line
@@ -22,6 +22,9 @@
 char str[100];
 int ret;
 
+/*
+    Function prototypes
+*/
 
 static int  i2c_write( unsigned char *buf, unsigned int len );
 static void ssd1306_print_char( unsigned char c );
@@ -33,7 +36,9 @@ static void ssd1306_goto_next_line( void );
 static void ssd1306_set_cursor( uint8_t lineNo, uint8_t cursorPos );
 static void ssd1306_write(bool is_cmd, unsigned char data);
 
-
+static void SSD1306_SetBrightness(uint8_t brightnessValue);
+static int oled_probe(struct i2c_client * client,const struct i2c_device_id * id);
+static void oled_remove(struct i2c_client * client);
 
 /*
 ** Variable to store Line Number and Cursor Position.
