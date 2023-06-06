@@ -1,23 +1,13 @@
 #include "ssd1306.h"
-
 #include <linux/delay.h>
-
 #include <linux/kernel.h>
-
 #include <linux/gpio.h>
-
 #include <linux/interrupt.h>
-
 #include <linux/timer.h>
-
 #include <linux/module.h>
-
 #include <linux/init.h>
-
 #include <linux/slab.h>
-
 #include <linux/i2c.h>
-
 #include <linux/types.h>
 
 /*
@@ -29,8 +19,8 @@
  **   
  */
 
-static struct i2c_adapter * etx_i2c_adapter = NULL; // I2C Adapter Structure
-static struct i2c_client * etx_i2c_client_oled = NULL; // I2C Cient Structure (In our case it is OLED)
+static struct i2c_adapter * ldr_i2c_adapter = NULL; // I2C Adapter Structure
+static struct i2c_client * ldr_i2c_client_oled = NULL; // I2C Cient Structure (In our case it is OLED)
 
 static int  count = 0,curr_value1=0;
 
@@ -40,7 +30,7 @@ static int i2c_write(unsigned char * buf, unsigned int len) {
      ** Sending Start condition, Slave address with R/W bit, 
      ** ACK/NACK and Stop condtions will be handled internally.
      */
-    int ret = i2c_master_send(etx_i2c_client_oled, buf, len);
+    int ret = i2c_master_send(ldr_i2c_client_oled, buf, len);
 
     return ret;
 }
@@ -383,17 +373,17 @@ static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {
 static int __init etx_driver_init(void) {
 
     //ssd1306_write(true, 0x81); // Contrast command
-    etx_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
+    ldr_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 
-    if (etx_i2c_adapter != NULL) {
-        etx_i2c_client_oled = i2c_new_client_device(etx_i2c_adapter, & oled_i2c_board_info);
+    if (ldr_i2c_adapter != NULL) {
+        ldr_i2c_client_oled = i2c_new_client_device(ldr_i2c_adapter, & oled_i2c_board_info);
 
-        if (etx_i2c_client_oled != NULL) {
+        if (ldr_i2c_client_oled != NULL) {
             i2c_add_driver( & etx_oled_driver);
             ret = 0;
         }
 
-        i2c_put_adapter(etx_i2c_adapter);
+        i2c_put_adapter(ldr_i2c_adapter);
     }
 
     // Request GPIO pin for IR sensor
@@ -428,7 +418,7 @@ static int __init etx_driver_init(void) {
  ** Module Exit function
  */
 static void __exit etx_driver_exit(void) {
-    i2c_unregister_device(etx_i2c_client_oled);
+    i2c_unregister_device(ldr_i2c_client_oled);
     i2c_del_driver( & etx_oled_driver);
     
     free_irq(gpio_to_irq(SENSOR1_PIN), NULL);
