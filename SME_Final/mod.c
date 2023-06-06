@@ -435,6 +435,6 @@ module_init(etx_driver_init);
 module_exit(etx_driver_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Darshan S Bharadwaj");
-MODULE_DESCRIPTION("SSD1306 I2C Driver");
+MODULE_AUTHOR("SYAMDETECT");
+MODULE_DESCRIPTION("LDR (Light Dependent Resistor) Sensor Driver");
 MODULE_VERSION("1.0");
