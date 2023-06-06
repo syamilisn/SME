@@ -8,7 +8,7 @@
 
 #include <linux/types.h>
 
-#define SENSOR1_PIN 27 // GPIO pin number for sensor 1 LDR
+#define SENSOR_PIN 27 // GPIO pin number for sensor LDR
 
 
 #define I2C_BUS_AVAILABLE       (          1 )              // I2C Bus available in our Raspberry Pi
@@ -37,8 +37,8 @@ static void ssd1306_set_cursor( uint8_t lineNo, uint8_t cursorPos );
 static void ssd1306_write(bool is_cmd, unsigned char data);
 
 static void SSD1306_SetBrightness(uint8_t brightnessValue);
-static int oled_probe(struct i2c_client * client,const struct i2c_device_id * id);
-static void oled_remove(struct i2c_client * client);
+// static int oled_probe(struct i2c_client * client,const struct i2c_device_id * id);
+// static void oled_remove(struct i2c_client * client);
 
 /*
 ** Variable to store Line Number and Cursor Position.
