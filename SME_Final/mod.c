@@ -318,7 +318,7 @@ static struct i2c_board_info oled_i2c_board_info = {
 unsigned long old_jiffie = 0;
 static irqreturn_t ldr_sensor_irq_handler(int irq, void * dev_id) {
 
-     unsigned long diff = jiffies - old_jiffie;
+     unsigned long diff = jiffies - old_jiffie;     //jiffies: inbuilt function for setting delays.
      if (diff < 500) {
          return IRQ_HANDLED;
     }
