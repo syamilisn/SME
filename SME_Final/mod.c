@@ -360,12 +360,16 @@ static irqreturn_t interrupt_thread_fn(int irq, void * dev_id) {
       //Write String to OLED
       
       {
-        ssd1306_string_display("Intruder detected.\n");    //Day outside/ Intruder present
+        char prompt [30];
+	    snprintf(prompt, 30,  "[Data:%d]\nIntruder detected.\n", gpio_get_value(SENSOR_PIN));
+        ssd1306_string_display(prompt);    //Day outside/ Intruder present
         brightness = 3;     //Set low brightness when intruder is detected
       }
       else
       {
-        ssd1306_string_display("No light detected.\n");     //Its dark/ Empty room
+        char prompt [30];
+	    snprintf(prompt, 30,  "[Data:%d]\nNo light detected.\n", gpio_get_value(SENSOR_PIN));
+        ssd1306_string_display(prompt);     //Its dark/ Empty room
 	    brightness = 149;   //Set high brightness when no light is detected
       }
     
